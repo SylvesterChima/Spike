@@ -15,7 +15,8 @@ namespace Spike.Pages
     public partial class ChatPage : ContentPage
     {
         public List<string> addedNames = new List<string>();
-        public string currentName = "";
+        private string currentName = "";
+        private string oldText = "";
 
         public ChatPage()
         {
@@ -38,6 +39,17 @@ namespace Spike.Pages
                 StringBuilder newText = new StringBuilder();
                 if (person != null)
                 {
+                    var mTextValue = rteMessage.GetRawString();
+                    var cp = rteMessage.CursorPosition;
+                    var mm = mTextValue.Substring(0, cp);
+                    var splitByEnterArrayMgs = mm.Split('\n');
+                    var splitByNBSArrayMgs = string.Join(" ", splitByEnterArrayMgs).Split('\xA0');
+                    var splitBySpaceArrayMgs = string.Join(" ", splitByNBSArrayMgs).Split(' ');
+                    var lastWord = splitBySpaceArrayMgs.Where(c => c != "").LastOrDefault();
+                    if(lastWord.ToLower() != currentName.ToLower())
+                    {
+                        currentName = lastWord;
+                    }
                     var rs = person.Name.Substring(currentName.Length - 1);
                     if (currentName.Length > 1 && currentName.Substring(1, 1) == currentName.Substring(1, 1).ToLower())
                     {
@@ -78,9 +90,9 @@ namespace Spike.Pages
                         }
                     }
 
-                    rteMessage.Text = mText;
+                    rteMessage.Text = mText.Trim();
                     await Task.Delay(200);
-                    rteMessage.CursorPosition = mText.Length;
+                    rteMessage.CursorPosition = rteMessage.Text.Length;
                     //MainThread.BeginInvokeOnMainThread(() =>
                     //{
                     //    rteMessage.CursorPosition = mText.Length;
@@ -154,7 +166,6 @@ namespace Spike.Pages
             var model = this.BindingContext as ChatViewModel;
             try
             {
-
                 if (rteMessage.Text != null)
                 {
                     var splitByEnterArrayMgs = rteMessage.Text.Split('\n');
@@ -209,64 +220,65 @@ namespace Spike.Pages
                     {   
                         model.ShowTags = false;
                     }
-
                     
                     await Task.Delay(200);
-                    var mTextValue = rteMessage.GetRawString();
-                    
-                    if (!string.IsNullOrWhiteSpace(mTextValue))
+                    if(e.Text.Length < oldText.Length)
                     {
-                        if (mTextValue.Length >= 3)
-                        {
-                            if (mTextValue.Length >= rteMessage.CursorPosition - 2)
-                            {
-                                var cp = rteMessage.CursorPosition - 2;
-                                var mm = mTextValue.Substring(0, cp);
-                                var lastWord = mm.Split(' ').Where(c=>c != "").LastOrDefault();
-                                if (lastWord != null)
-                                {
-                                    if (lastWord.Substring(0, 1) == "@")
-                                    {
-                                        var dList = new List<string>();
-                                        foreach (var item in addedNames)
-                                        {
-                                            if (!mTextValue.ToLower().Contains(item.ToLower()))
-                                            {
-                                                dList.Add(item);
-                                            }
-                                        }
-                                        foreach (var item in dList)
-                                        {
-                                            addedNames.Remove(item);
-                                        }
+                        var mTextValue = rteMessage.GetRawString();
 
-                                        if (dList.Count > 0)
+                        if (!string.IsNullOrWhiteSpace(mTextValue))
+                        {
+                            if (mTextValue.Length >= 3)
+                            {
+                                if (mTextValue.Length >= rteMessage.CursorPosition - 2)
+                                {
+                                    var cp = rteMessage.CursorPosition - 2;
+                                    var mm = mTextValue.Substring(0, cp);
+                                    var lastWord = mm.Split(' ').Where(c => c != "").LastOrDefault();
+                                    if (lastWord != null)
+                                    {
+                                        if (lastWord.Substring(0, 1) == "@")
                                         {
+                                            var dList = new List<string>();
                                             foreach (var item in addedNames)
                                             {
-                                                if (mTextValue.ToLower().Contains(item.ToLower()))
+                                                if (!mTextValue.ToLower().Contains(item.ToLower()))
                                                 {
-                                                    mTextValue = mTextValue.Replace(item, $"<a href=\"#\" style=\"color:blue; text-decoration: none;\">{item}</a>");
+                                                    dList.Add(item);
                                                 }
                                             }
+                                            foreach (var item in dList)
+                                            {
+                                                addedNames.Remove(item);
+                                            }
 
-                                            rteMessage.Text = mTextValue;
                                             if (dList.Count > 0)
                                             {
-                                                await Task.Delay(200);
-                                                MainThread.BeginInvokeOnMainThread(()=>{
-                                                    rteMessage.CursorPosition = cp + 2;
-                                                });
+                                                foreach (var item in addedNames)
+                                                {
+                                                    if (mTextValue.ToLower().Contains(item.ToLower()))
+                                                    {
+                                                        mTextValue = mTextValue.Replace(item, $"<a href=\"#\" style=\"color:blue; text-decoration: none;\">{item}</a>");
+                                                    }
+                                                }
+                                                //rteMessage.Text = "";
+                                                rteMessage.Text = mTextValue;
+                                                if (dList.Count > 0)
+                                                {
+                                                    await Task.Delay(200);
+                                                    MainThread.BeginInvokeOnMainThread(() => {
+                                                        rteMessage.CursorPosition = cp;
+                                                    });
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+
                         }
-                        
                     }
-
-
+                    oldText = e.Text;
                 }
             }
             catch (Exception ex)
