@@ -233,8 +233,8 @@ namespace Spike.Pages
                                 if (mTextValue.Length >= rteMessage.CursorPosition - 2)
                                 {
                                     var cp = rteMessage.CursorPosition - 2;
-                                    var mm = mTextValue.Substring(0, cp);
-                                    var lastWord = mm.Split(' ').Where(c => c != "").LastOrDefault();
+                                    var subStr = mTextValue.Substring(0, cp);
+                                    var lastWord = subStr.Split(' ').Where(c => c != "").LastOrDefault();
                                     if (lastWord != null)
                                     {
                                         if (lastWord.Substring(0, 1) == "@")
@@ -269,6 +269,29 @@ namespace Spike.Pages
                                                     MainThread.BeginInvokeOnMainThread(() => {
                                                         rteMessage.CursorPosition = cp;
                                                     });
+                                                    //await Task.Delay(10000);
+                                                    if(subStr.Length + 1 > cp)
+                                                    {
+                                                        if(rteMessage.Text[cp] != ' ' || rteMessage.Text[cp] != '\xA0')
+                                                        {
+                                                            cp = cp + 1;
+                                                            await Task.Delay(200);
+                                                            MainThread.BeginInvokeOnMainThread(() => {
+                                                                rteMessage.CursorPosition = cp;
+                                                            });
+                                                            if (subStr.Length > cp)
+                                                            {
+                                                                if (rteMessage.Text[cp] != ' ' || rteMessage.Text[cp] != '\xA0')
+                                                                {
+                                                                    cp = cp + 1;
+                                                                    await Task.Delay(200);
+                                                                    MainThread.BeginInvokeOnMainThread(() => {
+                                                                        rteMessage.CursorPosition = cp;
+                                                                    });
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
