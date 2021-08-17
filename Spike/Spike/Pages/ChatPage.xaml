@@ -69,7 +69,7 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <richtexteditor:SfRichTextEditor ShowToolbar="False" BackgroundColor="Azure" HorizontalOptions="FillAndExpand" 
-                                                 Grid.Column="0" x:Name="rteMessage" AutoSize="TextChanges" 
+                                                 Grid.Column="0" x:Name="rteMessage" AutoSize="TextChanges"  PlaceHolder="Send a message"
                                                  TextChanged="rteMessage_TextChanged" MaximumHeightRequest="200" VerticalOptions="EndAndExpand" />
 
                     <Image Grid.Column="1" Source="send.png" HeightRequest="40" WidthRequest="40" Margin="10,0,10,0">

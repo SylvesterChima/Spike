@@ -29,13 +29,7 @@ namespace Spike.Pages
             var model = this.BindingContext as ChatViewModel;
             try
             {
-                //var t = rteMessage.Text;
-                //var h = rteMessage.HtmlText;
-                //var r = rteMessage.GetRawString();
-                //var hh = rteMessage.GetHtmlString();
-
                 var person = (Person)((Grid)sender).BindingContext;
-
                 StringBuilder newText = new StringBuilder();
                 if (person != null)
                 {
@@ -101,57 +95,6 @@ namespace Spike.Pages
                     currentName = "";
                     model.ShowTags = false;
 
-                    {
-                        //var dt = rteMessage.Text.Split('\xA0');
-
-                        //foreach (var item in dt)
-                        //{
-                        //    foreach (var item1 in item.Split(' '))
-                        //    {
-                        //        if (item1.Contains('\n'))
-                        //        {
-                        //            foreach (var itm in item1.Split('\n'))
-                        //            {
-                        //                if (itm == currentName)
-                        //                {
-                        //                    newText.Append($"<a href=\"#\" style=\"color:#5CC9E5;\">@{person.Name + "\xA0"}</a>");
-                        //                }
-                        //                else if (!string.IsNullOrWhiteSpace(itm) && itm.Substring(0, 1) == "@" && addedNames.FirstOrDefault(c => c == itm) != null)
-                        //                {
-                        //                    newText.Append($"<a href=\"#\" style=\"color:#5CC9E5;\">{itm + "\n"}</a>");
-                        //                }
-                        //                else
-                        //                {
-                        //                    newText.Append(itm + "\n");
-                        //                }
-                        //            }
-                        //        }
-                        //        else
-                        //        {
-                        //            if (item1 == currentName)
-                        //            {
-                        //                newText.Append($"<a href=\"#\" style=\"color:#5CC9E5;\">@{person.Name + "\xA0"}</a>");
-                        //            }
-                        //            else if (!string.IsNullOrWhiteSpace(item1) && item1.Substring(0, 1) == "@" && addedNames.FirstOrDefault(c => c == item1) != null)
-                        //            {
-                        //                newText.Append($"<a href=\"#\" style=\"color:#5CC9E5;\">{item1 + "\xA0"}</a>");
-                        //            }
-                        //            else
-                        //            {
-                        //                newText.Append(item1 + "\xA0");
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        //rteMessage.Text = newText.ToString();
-                        //await Task.Delay(200);
-                        //rteMessage.CursorPosition = rteMessage.Text.Length;
-
-
-                        //currentName = "";
-
-                        //model.ShowTags = false;
-                    }
                 }
             }
             catch (Exception ex)
@@ -173,6 +116,15 @@ namespace Spike.Pages
                     var splitBySpaceArrayMgs = string.Join(" ", splitByNBSArrayMgs).Split(' ');
                     var arrayWithSymbols = splitBySpaceArrayMgs.Where(c => c != "" && c.Substring(0, 1) == "@").ToList();
                     var dt = arrayWithSymbols.Where(c => addedNames.FirstOrDefault(x => x.ToLower() == c.ToLower()) == null).ToList();
+
+                    //var mmTextValue = rteMessage.GetRawString();
+                    //var mcp = rteMessage.CursorPosition;
+                    //var mmm = mmTextValue.Substring(0, mcp);
+                    //var msplitByEnterArrayMgs = mmm.Split('\n');
+                    //var msplitByNBSArrayMgs = string.Join(" ", msplitByEnterArrayMgs).Split('\xA0');
+                    //var msplitBySpaceArrayMgs = string.Join(" ", msplitByNBSArrayMgs).Split(' ');
+                    //var mlastWord = msplitBySpaceArrayMgs.Where(c => c != "").LastOrDefault();
+
                     if (dt.Count > 0)
                     {
                         foreach (var item in dt)
@@ -233,53 +185,51 @@ namespace Spike.Pages
                                 if (mTextValue.Length >= rteMessage.CursorPosition - 2)
                                 {
                                     var cp = rteMessage.CursorPosition - 2;
-                                    var subStr = mTextValue.Substring(0, cp);
-                                    var lastWord = subStr.Split(' ').Where(c => c != "").LastOrDefault();
-                                    if (lastWord != null)
+                                    if (cp > 0)
                                     {
-                                        if (lastWord.Substring(0, 1) == "@")
+                                        var subStr = mTextValue.Substring(0, cp);
+                                        var lastWord = subStr.Split(' ').Where(c => c != "").LastOrDefault();
+                                        if (lastWord != null)
                                         {
-                                            var dList = new List<string>();
-                                            foreach (var item in addedNames)
+                                            if (lastWord.Substring(0, 1) == "@")
                                             {
-                                                if (!mTextValue.ToLower().Contains(item.ToLower()))
-                                                {
-                                                    dList.Add(item);
-                                                }
-                                            }
-                                            foreach (var item in dList)
-                                            {
-                                                addedNames.Remove(item);
-                                            }
-
-                                            if (dList.Count > 0)
-                                            {
+                                                var dList = new List<string>();
                                                 foreach (var item in addedNames)
                                                 {
-                                                    if (mTextValue.ToLower().Contains(item.ToLower()))
+                                                    if (!mTextValue.ToLower().Contains(item.ToLower()))
                                                     {
-                                                        mTextValue = mTextValue.Replace(item, $"<a href=\"#\" style=\"color:blue; text-decoration: none;\">{item}</a>");
+                                                        dList.Add(item);
                                                     }
                                                 }
-                                                //rteMessage.Text = "";
-                                                rteMessage.Text = mTextValue;
+                                                foreach (var item in dList)
+                                                {
+                                                    addedNames.Remove(item);
+                                                }
+
                                                 if (dList.Count > 0)
                                                 {
-                                                    await Task.Delay(200);
-                                                    MainThread.BeginInvokeOnMainThread(() => {
-                                                        rteMessage.CursorPosition = cp;
-                                                    });
-                                                    //await Task.Delay(10000);
-                                                    if(subStr.Length + 1 > cp)
+                                                    if (addedNames.Count > 0)
                                                     {
-                                                        if(rteMessage.Text[cp] != ' ' || rteMessage.Text[cp] != '\xA0')
+                                                        foreach (var item in addedNames)
                                                         {
-                                                            cp = cp + 1;
-                                                            await Task.Delay(200);
-                                                            MainThread.BeginInvokeOnMainThread(() => {
-                                                                rteMessage.CursorPosition = cp;
-                                                            });
-                                                            if (subStr.Length > cp)
+                                                            if (mTextValue.ToLower().Contains(item.ToLower()))
+                                                            {
+                                                                mTextValue = mTextValue.Replace(item, $"<a href=\"#\" style=\"color:blue; text-decoration: none;\">{item}</a>");
+                                                            }
+                                                        }
+                                                    }
+                                                    //rteMessage.Text = "";
+                                                    rteMessage.Text = mTextValue;
+                                                    if (dList.Count > 0)
+                                                    {
+                                                        await Task.Delay(200);
+                                                        MainThread.BeginInvokeOnMainThread(() => {
+                                                            rteMessage.CursorPosition = cp;
+                                                        });
+                                                        //await Task.Delay(10000);
+                                                        if (subStr.Length + 1 > cp)
+                                                        {
+                                                            if (rteMessage.Text.Length > cp)
                                                             {
                                                                 if (rteMessage.Text[cp] != ' ' || rteMessage.Text[cp] != '\xA0')
                                                                 {
@@ -288,6 +238,17 @@ namespace Spike.Pages
                                                                     MainThread.BeginInvokeOnMainThread(() => {
                                                                         rteMessage.CursorPosition = cp;
                                                                     });
+                                                                    if (subStr.Length > cp)
+                                                                    {
+                                                                        if (rteMessage.Text[cp] != ' ' || rteMessage.Text[cp] != '\xA0')
+                                                                        {
+                                                                            cp = cp + 1;
+                                                                            await Task.Delay(200);
+                                                                            MainThread.BeginInvokeOnMainThread(() => {
+                                                                                rteMessage.CursorPosition = cp;
+                                                                            });
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }

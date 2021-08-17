@@ -12,7 +12,7 @@ namespace Spike
             InitializeComponent();
 
             //MainPage = new MainPage();
-            Page page = FreshMvvm.FreshPageModelResolver.ResolvePageModel<ChatViewModel>();
+            Page page = FreshMvvm.FreshPageModelResolver.ResolvePageModel<HomeViewModel>();
             NavigationPage nav = new FreshMvvm.FreshNavigationContainer(page) as NavigationPage;
             MainPage = nav;
         }
