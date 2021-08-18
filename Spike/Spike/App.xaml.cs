@@ -9,6 +9,7 @@ namespace Spike
     {
         public App()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDkwMDY0QDMxMzkyZTMyMmUzMEtSM0FQUjBjdmlTMUEvTWZMNVNINTlKVHFWcmVVYmRCUXZ3eHBsVXNuclE9");
             InitializeComponent();
 
             //MainPage = new MainPage();

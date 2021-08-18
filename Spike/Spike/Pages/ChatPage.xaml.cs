@@ -34,8 +34,8 @@ namespace Spike.Pages
                 if (person != null)
                 {
                     var mTextValue = rteMessage.GetRawString();
-                    var cp = rteMessage.CursorPosition;
-                    var mm = mTextValue.Substring(0, cp);
+                    //var cp = rteMessage.CursorPosition;
+                    var mm = mTextValue.Substring(0, rteMessage.CursorPosition);
                     var splitByEnterArrayMgs = mm.Split('\n');
                     var splitByNBSArrayMgs = string.Join(" ", splitByEnterArrayMgs).Split('\xA0');
                     var splitBySpaceArrayMgs = string.Join(" ", splitByNBSArrayMgs).Split(' ');
