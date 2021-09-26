@@ -143,6 +143,7 @@
                         HorizontalOptions="FillAndExpand"
                         Placeholder="Send a message"
                         TextChanged="mMessage_TextChanged"
+                        TextColor="Black"
                         VerticalOptions="EndAndExpand" />
 
                     <Image

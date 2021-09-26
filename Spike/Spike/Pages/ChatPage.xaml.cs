@@ -67,13 +67,12 @@ namespace Spike.Pages
                     var rs = person.Name.Substring(currentName.Length - 1);
                     if (currentName.Length > 1 && currentName.Substring(1, 1) == currentName.Substring(1, 1).ToLower())
                     {
-                        //MessagingCenter.Send<object, string>(this, "appendText", rs.ToLower());
-                        MessagingCenter.Send<object, TaggingUser>(this, "appendText", new TaggingUser { Text = "@" + person.Name, TypedCount = currentName.Length });
+                        MessagingCenter.Send<object, string>(this, "appendText", rs.ToLower());
+
                     }
                     else
                     {
-                        //MessagingCenter.Send<object, string>(this, "appendText", rs);
-                        MessagingCenter.Send<object, TaggingUser>(this, "appendText", new TaggingUser { Text = "@" + person.Name, TypedCount = 1 });
+                        MessagingCenter.Send<object, string>(this, "appendText", rs);
                     }
 
                     addedNames.Add(new Person { Name = "@" + person.Name });
@@ -84,7 +83,7 @@ namespace Spike.Pages
 
                     //}
 
-                    //MessagingCenter.Send<object>(this, "reformatText");
+                    MessagingCenter.Send<object>(this, "reformatText");
                     model.ShowTags = false;
 
                 }

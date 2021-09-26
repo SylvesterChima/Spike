@@ -6,7 +6,7 @@ namespace Spike.model
 {
     public class TaggingUser
     {
-        public string Text { get; set; }
+        public string RemainingString { get; set; }
         public int TypedCount { get; set; }
     }
 }
