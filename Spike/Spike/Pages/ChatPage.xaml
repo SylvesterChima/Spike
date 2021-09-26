@@ -1,23 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" 
-             xmlns:richtexteditor="clr-namespace:Syncfusion.XForms.RichTextEditor;assembly=Syncfusion.SfRichTextEditor.XForms" 
-             xmlns:htmlLabel="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
-             x:Class="Spike.Pages.ChatPage"
-             Title="Demo"
-             BackgroundColor="#E5E5E5">
+<ContentPage
+    x:Class="Spike.Pages.ChatPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Spike.controls"
+    xmlns:htmlLabel="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
+    xmlns:richtexteditor="clr-namespace:Syncfusion.XForms.RichTextEditor;assembly=Syncfusion.SfRichTextEditor.XForms"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    Title="Demo"
+    BackgroundColor="#E5E5E5">
 
     <StackLayout HorizontalOptions="FillAndExpand">
-        <Grid RowSpacing="0" ColumnSpacing="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid
+            ColumnSpacing="0"
+            HorizontalOptions="FillAndExpand"
+            RowSpacing="0"
+            VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <ListView ItemsSource="{Binding Messages}"
-                  Margin="20,35,20,20"
-                  HasUnevenRows="true">
+            <ListView
+                Margin="20,35,20,20"
+                HasUnevenRows="true"
+                ItemsSource="{Binding Messages}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -25,8 +32,11 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <htmlLabel:HtmlLabel Text="{Binding Text}"/>
-                                <!--<Label TextType="Html" TextDecorations="None" Text="{Binding Text}" />-->
+                                <!--<htmlLabel:HtmlLabel Text="{Binding Text}"/>-->
+                                <Label
+                                    Text="{Binding Text}"
+                                    TextDecorations="None"
+                                    TextType="Html" />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
@@ -34,54 +44,119 @@
             </ListView>
 
             <yummy:PancakeView
-                Padding="10,5,10,0" x:Name="filterConatiner" IsVisible="{Binding ShowTags}" Grid.Row="0" HorizontalOptions="FillAndExpand"
-                CornerRadius="25,25,0,0" VerticalOptions="End" BackgroundColor="White" >
-                <StackLayout x:Name="sNames"
-                      BindableLayout.ItemsSource="{Binding People}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalOptions="FillAndExpand">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="35"/>
-                                    <RowDefinition Height="auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="35"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Frame Padding="0" HeightRequest="24" WidthRequest="24" CornerRadius="12" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                                    HasShadow="False" BorderColor="#dddddd" Grid.Column="0" IsClippedToBounds="True">
-                                    <Image Source="{Binding ImageUrl}" Aspect="AspectFill"/>
-                                </Frame>
-                                <Label Text="{Binding Name}" Grid.Column="1" FontSize="16" TextColor="#1C1C1C" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand"/>
-                                <BoxView BackgroundColor="#EEEEEE" HeightRequest="1" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.ColumnSpan="2"/>
+                x:Name="filterConatiner"
+                Grid.Row="0"
+                Padding="10,5,10,0"
+                BackgroundColor="White"
+                CornerRadius="25,25,0,0"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding ShowTags}"
+                VerticalOptions="End">
+                <ScrollView>
+                    <StackLayout x:Name="sNames" BindableLayout.ItemsSource="{Binding People}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalOptions="FillAndExpand">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="35" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="35" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Frame
+                                        Grid.Column="0"
+                                        Padding="0"
+                                        BorderColor="#dddddd"
+                                        CornerRadius="12"
+                                        HasShadow="False"
+                                        HeightRequest="24"
+                                        HorizontalOptions="CenterAndExpand"
+                                        IsClippedToBounds="True"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="24">
+                                        <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                                    </Frame>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="16"
+                                        HorizontalOptions="FillAndExpand"
+                                        Text="{Binding Name}"
+                                        TextColor="#1C1C1C"
+                                        VerticalOptions="CenterAndExpand" />
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        BackgroundColor="#EEEEEE"
+                                        HeightRequest="1"
+                                        HorizontalOptions="FillAndExpand" />
 
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="Member_Tapped" NumberOfTapsRequired="1"/>
-                                </Grid.GestureRecognizers>
-                            </Grid>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Member_Tapped" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
             </yummy:PancakeView>
- 
-            <StackLayout Grid.Row="1" HorizontalOptions="FillAndExpand" Spacing="0">
+
+            <StackLayout
+                Grid.Row="1"
+                HorizontalOptions="FillAndExpand"
+                Spacing="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <richtexteditor:SfRichTextEditor ShowToolbar="False" BackgroundColor="Azure" HorizontalOptions="FillAndExpand" 
-                                                 Grid.Column="0" x:Name="rteMessage" AutoSize="TextChanges"  PlaceHolder="Send a message"
-                                                 TextChanged="rteMessage_TextChanged" MaximumHeightRequest="200" VerticalOptions="EndAndExpand" />
+                    <!--<richtexteditor:SfRichTextEditor
+                        x:Name="rteMessage"
+                        Grid.Column="0"
+                        AutoSize="TextChanges"
+                        BackgroundColor="Azure"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="false"
+                        MaximumHeightRequest="200"
+                        PlaceHolder="Send a message"
+                        ShowToolbar="False"
+                        TextChanged="rteMessage_TextChanged"
+                        VerticalOptions="EndAndExpand" />
 
-                    <Image Grid.Column="1" Source="send.png" HeightRequest="40" WidthRequest="40" Margin="10,0,10,0">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Image.GestureRecognizers>
+                    <Editor
+                        x:Name="txtMessage"
+                        Grid.Column="0"
+                        BackgroundColor="Azure"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="false"
+                        Placeholder="Send a message"
+                        TextChanged="txtMessage_TextChanged"
+                        VerticalOptions="EndAndExpand" />-->
+
+
+                    <controls:TagEditor
+                        x:Name="mMessage"
+                        Grid.Column="0"
+                        BackgroundColor="Azure"
+                        HeightRequest="80"
+                        HorizontalOptions="FillAndExpand"
+                        Placeholder="Send a message"
+                        TextChanged="mMessage_TextChanged"
+                        VerticalOptions="EndAndExpand" />
+
+                    <Image
+                        Grid.Column="1"
+                        Margin="10,0,10,0"
+                        HeightRequest="40"
+                        Source="send.png"
+                        WidthRequest="40">
+                        <!--<Image.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped" />
+                        </Image.GestureRecognizers>-->
                     </Image>
                 </Grid>
-                
+
             </StackLayout>
         </Grid>
     </StackLayout>

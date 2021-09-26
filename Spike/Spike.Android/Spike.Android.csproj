@@ -55,11 +55,8 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Syncfusion.Xamarin.Core">
-      <Version>19.2.0.56</Version>
-    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfRichTextEditor">
-      <Version>19.2.0.56</Version>
+      <Version>19.2.0.60</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.HtmlLabel">
       <Version>5.0.0</Version>
@@ -72,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderer\MentionEditorRenderer.cs" />
     <Compile Include="Renderer\TagEditorRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
