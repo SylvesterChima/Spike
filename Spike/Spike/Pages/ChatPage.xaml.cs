@@ -67,12 +67,13 @@ namespace Spike.Pages
                     var rs = person.Name.Substring(currentName.Length - 1);
                     if (currentName.Length > 1 && currentName.Substring(1, 1) == currentName.Substring(1, 1).ToLower())
                     {
-                        MessagingCenter.Send<object, string>(this, "appendText", rs.ToLower());
-
+                        //MessagingCenter.Send<object, string>(this, "appendText", rs.ToLower());
+                        mMessage.AddMention(rs.ToLower());
                     }
                     else
                     {
-                        MessagingCenter.Send<object, string>(this, "appendText", rs);
+                        //MessagingCenter.Send<object, string>(this, "appendText", rs);
+                        mMessage.AddMention(rs.ToLower());
                     }
 
                     addedNames.Add(new Person { Name = "@" + person.Name });

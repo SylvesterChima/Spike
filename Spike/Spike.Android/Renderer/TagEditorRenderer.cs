@@ -35,35 +35,97 @@ namespace Spike.Droid.Renderer
         protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
-            if (Control != null)
+
+            if (e.OldElement != null)
             {
-                Control.BeforeTextChanged += Control_BeforeTextChanged;
-                Control.AfterTextChanged += Control_AfterTextChanged;
-
-                MessagingCenter.Unsubscribe<object>(this, "reformatText");
-                MessagingCenter.Unsubscribe<object, string>(this, "appendText");
-                MessagingCenter.Unsubscribe<object, List<model.Person>>(this, "AddTags");
-
-
-                MessagingCenter.Subscribe<object>(this, "reformatText", (p) =>
+                if (e.OldElement is TagEditor editor)
                 {
-                    ReFormat();
-                });
+                    editor.MentionAdd -= Editor_AddMention;
+                    MessagingCenter.Unsubscribe<object>(this, "reformatText");
+                    //MessagingCenter.Unsubscribe<object, string>(this, "appendText");
+                    MessagingCenter.Unsubscribe<object, List<model.Person>>(this, "AddTags");
+                }
+            }
 
-                MessagingCenter.Subscribe<object, string>(this, "appendText", (p, text) =>
+            if (e.NewElement != null)
+            {
+                if (Control == null)
                 {
-                    var cp = Control.SelectionStart;
-                    SpannableStringBuilder builder = new SpannableStringBuilder(Control.Text);
-                    NextCursorPosition = cp + text.Length;
-                    builder.Insert(cp, text);
-                    Control.TextFormatted = builder;
+                    
+                }
 
-                });
-
-                MessagingCenter.Subscribe<object, List<model.Person>>(this, "AddTags", (p, tags) =>
+                if (Control != null)
                 {
-                    addedNames = tags;
-                });
+                    Control.BeforeTextChanged += Control_BeforeTextChanged;
+                    Control.AfterTextChanged += Control_AfterTextChanged;
+
+                    MessagingCenter.Subscribe<object>(this, "reformatText", (p) =>
+                    {
+                        ReFormat();
+                    });
+
+                    if (e.NewElement is TagEditor editor)
+                    {
+                        editor.MentionAdd += Editor_AddMention;
+                    }
+
+                    MessagingCenter.Subscribe<object, List<model.Person>>(this, "AddTags", (p, tags) =>
+                    {
+                        addedNames = tags;
+                    });
+                }
+            }
+
+
+
+
+
+            //if (Control != null)
+            //{
+            //    Control.BeforeTextChanged += Control_BeforeTextChanged;
+            //    Control.AfterTextChanged += Control_AfterTextChanged;
+
+            //    MessagingCenter.Unsubscribe<object>(this, "reformatText");
+            //    MessagingCenter.Unsubscribe<object, string>(this, "appendText");
+            //    MessagingCenter.Unsubscribe<object, List<model.Person>>(this, "AddTags");
+
+
+            //    MessagingCenter.Subscribe<object>(this, "reformatText", (p) =>
+            //    {
+            //        ReFormat();
+            //    });
+
+            //    MessagingCenter.Subscribe<object, string>(this, "appendText", (p, text) =>
+            //    {
+            //        var cp = Control.SelectionStart;
+            //        SpannableStringBuilder builder = new SpannableStringBuilder(Control.Text);
+            //        NextCursorPosition = cp + text.Length;
+            //        builder.Insert(cp, text);
+            //        Control.TextFormatted = builder;
+
+            //    });
+
+            //    MessagingCenter.Subscribe<object, List<model.Person>>(this, "AddTags", (p, tags) =>
+            //    {
+            //        addedNames = tags;
+            //    });
+
+            //}
+        }
+
+        private void Editor_AddMention(object sender, TagEditor.AddMentionEventArgs e)
+        {
+            try
+            {
+                var cp = Control.SelectionStart;
+                SpannableStringBuilder builder = new SpannableStringBuilder(Control.Text);
+                NextCursorPosition = cp + e.MentionText.Length;
+                builder.Insert(cp, e.MentionText);
+                Control.TextFormatted = builder;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
 
             }
         }
@@ -77,6 +139,7 @@ namespace Spike.Droid.Renderer
                 SpannableStringBuilder builder = new SpannableStringBuilder();
                 var words = msg.Split(' ');
                 var index = 0;
+                var totalCount = words.Count();
                 foreach (var item in words)
                 {
                     if (addedNames.FirstOrDefault(c => c.Name.ToLower().Split(' ').Contains(item.ToLower())) != null)
@@ -112,7 +175,7 @@ namespace Spike.Droid.Renderer
                     {
                         builder.Append(item);
                     }
-                    if (item != msg.Split(' ').LastOrDefault())
+                    if (index != totalCount - 1)
                     {
                         builder.Append(" ");
                         cp = cp + item.Length + 1;
@@ -121,6 +184,7 @@ namespace Spike.Droid.Renderer
                     {
                         cp = cp + item.Length;
                     }
+
                     index++;
 
                 }
