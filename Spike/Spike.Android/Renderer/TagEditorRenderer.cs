@@ -41,9 +41,8 @@ namespace Spike.Droid.Renderer
                 if (e.OldElement is TagEditor editor)
                 {
                     editor.MentionAdd -= Editor_AddMention;
-                    MessagingCenter.Unsubscribe<object>(this, "reformatText");
-                    //MessagingCenter.Unsubscribe<object, string>(this, "appendText");
-                    MessagingCenter.Unsubscribe<object, List<model.Person>>(this, "AddTags");
+                    editor.UpdateMentionNames -= Editor_UpdateMentionNames;
+                    editor.ReformatText -= Editor_ReformatText;
                 }
             }
 
@@ -59,58 +58,26 @@ namespace Spike.Droid.Renderer
                     Control.BeforeTextChanged += Control_BeforeTextChanged;
                     Control.AfterTextChanged += Control_AfterTextChanged;
 
-                    MessagingCenter.Subscribe<object>(this, "reformatText", (p) =>
-                    {
-                        ReFormat();
-                    });
-
                     if (e.NewElement is TagEditor editor)
                     {
                         editor.MentionAdd += Editor_AddMention;
+                        editor.UpdateMentionNames += Editor_UpdateMentionNames;
+                        editor.ReformatText += Editor_ReformatText;
                     }
 
-                    MessagingCenter.Subscribe<object, List<model.Person>>(this, "AddTags", (p, tags) =>
-                    {
-                        addedNames = tags;
-                    });
                 }
             }
 
+        }
 
+        private void Editor_ReformatText(object sender, EventArgs e)
+        {
+            ReFormat();
+        }
 
-
-
-            //if (Control != null)
-            //{
-            //    Control.BeforeTextChanged += Control_BeforeTextChanged;
-            //    Control.AfterTextChanged += Control_AfterTextChanged;
-
-            //    MessagingCenter.Unsubscribe<object>(this, "reformatText");
-            //    MessagingCenter.Unsubscribe<object, string>(this, "appendText");
-            //    MessagingCenter.Unsubscribe<object, List<model.Person>>(this, "AddTags");
-
-
-            //    MessagingCenter.Subscribe<object>(this, "reformatText", (p) =>
-            //    {
-            //        ReFormat();
-            //    });
-
-            //    MessagingCenter.Subscribe<object, string>(this, "appendText", (p, text) =>
-            //    {
-            //        var cp = Control.SelectionStart;
-            //        SpannableStringBuilder builder = new SpannableStringBuilder(Control.Text);
-            //        NextCursorPosition = cp + text.Length;
-            //        builder.Insert(cp, text);
-            //        Control.TextFormatted = builder;
-
-            //    });
-
-            //    MessagingCenter.Subscribe<object, List<model.Person>>(this, "AddTags", (p, tags) =>
-            //    {
-            //        addedNames = tags;
-            //    });
-
-            //}
+        private void Editor_UpdateMentionNames(object sender, TagEditor.UpdateAddedNamesEventArgs e)
+        {
+            addedNames = e.AddedNames;
         }
 
         private void Editor_AddMention(object sender, TagEditor.AddMentionEventArgs e)

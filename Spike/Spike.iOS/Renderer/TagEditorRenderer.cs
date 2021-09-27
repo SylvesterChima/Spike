@@ -25,6 +25,8 @@ namespace Spike.iOS.Renderer
                 if (e.OldElement is TagEditor editor)
                 {
                     editor.MentionAdd -= Editor_AddMention;
+                    editor.UpdateMentionNames -= Editor_UpdateMentionNames;
+                    editor.ReformatText -= Editor_ReformatText;
                 }
             }
 
@@ -41,10 +43,22 @@ namespace Spike.iOS.Renderer
                     if (e.NewElement is TagEditor editor)
                     {
                         editor.MentionAdd += Editor_AddMention;
+                        editor.UpdateMentionNames += Editor_UpdateMentionNames;
+                        editor.ReformatText += Editor_ReformatText;
                     }
 
                 }
             }
+        }
+
+        private void Editor_ReformatText(object sender, EventArgs e)
+        {
+            //refort text
+        }
+
+        private void Editor_UpdateMentionNames(object sender, TagEditor.UpdateAddedNamesEventArgs e)
+        {
+            //update list
         }
 
         private void Editor_AddMention(object sender, TagEditor.AddMentionEventArgs e)

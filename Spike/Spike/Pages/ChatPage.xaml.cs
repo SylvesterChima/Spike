@@ -45,7 +45,7 @@ namespace Spike.Pages
         {
             base.OnDisappearing();
             MessagingCenter.Unsubscribe<object, int>(this, "setCurrentCursorPosition");
-            MessagingCenter.Unsubscribe<object, List<model.Person>>(this, "RemoveTags");
+            MessagingCenter.Unsubscribe<object, List<Person>>(this, "RemoveTags");
         }
 
 
@@ -73,18 +73,15 @@ namespace Spike.Pages
                     else
                     {
                         //MessagingCenter.Send<object, string>(this, "appendText", rs);
-                        mMessage.AddMention(rs.ToLower());
+                        mMessage.AddMention(rs);
                     }
 
                     addedNames.Add(new Person { Name = "@" + person.Name });
-                    MessagingCenter.Send<object, List<Person>>(this, "AddTags", addedNames);
+                    mMessage.UpdateAddedNames(addedNames);
+                    mMessage.Reformat();
+                    //MessagingCenter.Send<object, List<Person>>(this, "AddTags", addedNames);
 
-                    //if (addedNames.FirstOrDefault(c => c.Name == "@" + person.Name) == null)
-                    //{
-
-                    //}
-
-                    MessagingCenter.Send<object>(this, "reformatText");
+                    //MessagingCenter.Send<object>(this, "reformatText");
                     model.ShowTags = false;
 
                 }
